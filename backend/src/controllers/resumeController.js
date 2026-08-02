@@ -23,7 +23,11 @@ export const uploadResume = async (req, res) => {
       return res.status(400).json({ error: "PDF appears to be empty or image-only. Please upload a text-based PDF." });
     }
 
-    const analysis = await analyzeResume(parsed.text);
+    // ── Extract jobRole from request body ─────────────────────────────────────
+    const jobRole = req.body.jobRole || "";
+
+    // ── Pass jobRole to AI analysis ───────────────────────────────────────────
+    const analysis = await analyzeResume(parsed.text, jobRole);
 
     const resume = await Resume.create({
       user: req.user,

@@ -1,12 +1,16 @@
 import { useState } from "react";
 import API from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // ── Pick up success message from Register redirect ─────────────────────────
+  const successMessage = location.state?.successMessage || "";
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -73,6 +77,26 @@ function Login() {
           </div>
           <h1 className="auth-title">Welcome back</h1>
           <p className="auth-subtitle">Sign in to analyze your resume with AI</p>
+
+          {/* ── Success message from Register ─────────────────────────────── */}
+          {successMessage && (
+            <div className="alert alert-success" style={{
+              background: "#f0fdf4",
+              border: "1px solid #86efac",
+              borderRadius: 10,
+              padding: "12px 16px",
+              marginBottom: 20,
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              color: "#166534",
+              fontSize: 14,
+              fontWeight: 500,
+            }}>
+              <span>✅</span>
+              <span>{successMessage}</span>
+            </div>
+          )}
 
           {error && (
             <div className="alert alert-error">

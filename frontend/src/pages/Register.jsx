@@ -32,10 +32,11 @@ function Register() {
 
     setLoading(true);
     try {
-      const res = await API.post("/auth/register", form);
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      navigate("/dashboard");
+      await API.post("/auth/register", form);
+
+      // ── Don't save token — redirect to login with success message ──────────
+      navigate("/", { state: { successMessage: "Account created successfully! Please login to continue." } });
+
     } catch (err) {
       setApiError(err.response?.data?.error || "Registration failed. Please try again.");
     } finally {
